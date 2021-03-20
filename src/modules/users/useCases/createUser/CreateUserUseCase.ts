@@ -5,7 +5,6 @@ interface IRequest {
   name: string;
   email: string;
 }
-
 class CreateUserUseCase {
   constructor(private usersRepository: IUsersRepository) {}
 
