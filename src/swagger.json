@@ -1,0 +1,302 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "users-api Documentation",
+    "description": "Challenge #04 of the Ignite bootcamp from Rocketseat",
+    "version": "1.0.0",
+    "contact": {
+      "email": "adamaugustinsky@gmail.com"
+    }
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Create a new user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUser"
+              },
+              "example": {
+                "name": "user name example",
+                "email": "user@email.com"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User sucessfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                    "$ref": "#/components/schemas/User"
+                },
+                "example": {
+                  "id": "3c9adaa9-8de4-47d1-8788-4f8b336f741c",
+                  "admin": false,
+                  "name": "user name example",
+                  "email": "user@email.com",
+                  "created_at": "2021-03-10T22:10:32.992Z",
+                  "updated_at": "2021-03-10T22:10:32.992Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email already in use",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "email already in use"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["users"],
+        "summary": "Return all users",
+        "description": "Only `admin` users can access",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "header",
+            "required": true,
+            "description": "User ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation was sucessfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                },
+                "example": [
+                  {
+                    "id": "3c9adaa9-8de4-47d1-8788-4f8b336f741c",
+                    "admin": false,
+                    "name": "user name example",
+                    "email": "user@email.com",
+                    "created_at": "2021-03-10T22:10:32.992Z",
+                    "updated_at": "2021-03-10T22:10:32.992Z"
+                  },
+                  {
+                    "id": "3c9adaa9-8de4-47d1-8788-4f8b336f741c",
+                    "admin": true,
+                    "name": "user name example 2",
+                    "email": "user2@email.com",
+                    "created_at": "2021-03-11T22:10:32.992Z",
+                    "updated_at": "2021-03-11T22:10:32.992Z"
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "User need to be admin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "user not admin"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}/admin": {
+      "patch": {
+        "tags": ["users"],
+        "summary": "Turn user into an admin",
+        "description": "Only admin users can access",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "description": "User ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation was sucessfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                    "$ref": "#/components/schemas/User"
+                },
+                "example": {
+                  "id": "3c9adaa9-8de4-47d1-8788-4f8b336f741c",
+                  "admin": true,
+                  "name": "user name example",
+                  "email": "user@email.com",
+                  "created_at": "2021-03-10T22:10:32.992Z",
+                  "updated_at": "2021-03-10T22:10:32.992Z"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User doesn't exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "user doesn't exists"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Return a specific user",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "description": "User ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation was sucessfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "example": [
+                  {
+                    "id": "3c9adaa9-8de4-47d1-8788-4f8b336f741c",
+                    "admin": false,
+                    "name": "user name example",
+                    "email": "user@email.com",
+                    "created_at": "2021-03-10T22:10:32.992Z",
+                    "updated_at": "2021-03-10T22:10:32.992Z"
+                  },
+                  {
+                    "id": "3c9adaa9-8de4-47d1-8788-4f8b336f741c",
+                    "admin": true,
+                    "name": "user name example 2",
+                    "email": "user2@email.com",
+                    "created_at": "2021-03-11T22:10:32.992Z",
+                    "updated_at": "2021-03-11T22:10:32.992Z"
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "Email Already in Use",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "email already in use"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "admin": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateUser": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
